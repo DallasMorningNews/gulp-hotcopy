@@ -1,5 +1,5 @@
 {
-  "name": "dmn-gulp-hotcopy",
+  "name": "gulp-hotcopy",
   "version": "0.1.0",
   "description": "A tool to include converted ArchieML-to-JSON copy in a page's nunjucks context.",
   "main": "index.js",
