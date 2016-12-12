@@ -20,50 +20,58 @@ function parseArchieFile(fileName) {
     });
 }
 
-module.exports = function(meta) {
-    var metaObj = meta;
+module.exports = {
+    watchHotCopyFiles: function(gulp, tasks) {
+        return gulp.watch(
+            './build/static/assets/hot-copy/*.aml',
+            tasks
+        ).on("change", reload);
+    },
+    insertHotCopy: function(meta) {
+        var metaObj = meta;
 
-    if (typeof meta.hotCopyDocument !== 'undefined') {
-        if (meta.hotCopyDocument !== '') {
-            var hotCopyItems = {};
+        if (typeof meta.hotCopyDocument !== 'undefined') {
+            if (meta.hotCopyDocument !== '') {
+                var hotCopyItems = {};
 
-            var archiePromises = _.map(
-                fs.readdirSync(HOT_COPY_DIR),
-                function(dirFile) {
-                    if (dirFile.substring(dirFile.indexOf('.')) === '.aml') {
-                        return parseArchieFile(
-                            dirFile.substring(0, dirFile.indexOf('.'))
-                        );
+                var archiePromises = _.map(
+                    fs.readdirSync(HOT_COPY_DIR),
+                    function(dirFile) {
+                        if (dirFile.substring(dirFile.indexOf('.')) === '.aml') {
+                            return parseArchieFile(
+                                dirFile.substring(0, dirFile.indexOf('.'))
+                            );
+                        }
+
+                        return null;
                     }
+                );
 
-                    return null;
-                }
-            );
+                Promise.all(_.compact(archiePromises)).then(
+                    function(results) {
+                        _.each(results, function(result) {
+                            // Namespace hot-copy data under the 'hotCopy' property
+                            // on the meta object.
+                            hotCopyItems[result.fileName] = result.data;
 
-            Promise.all(_.compact(archiePromises)).then(
-                function(results) {
-                    _.each(results, function(result) {
-                        // Namespace hot-copy data under the 'hotCopy' property
-                        // on the meta object.
-                        hotCopyItems[result.fileName] = result.data;
+                            // Write the data to a JSON file.
+                            fs.writeFile(
+                                HOT_COPY_DIR + result.fileName + '.json',
+                                JSON.stringify(result.data, null, 4),
+                                function(err) { if (err) { return console.log(err); } }
+                            );
+                        });
 
-                        // Write the data to a JSON file.
-                        fs.writeFile(
-                            HOT_COPY_DIR + result.fileName + '.json',
-                            JSON.stringify(result.data, null, 4),
-                            function(err) { if (err) { return console.log(err); } }
-                        );
-                    });
-
-                    metaObj = _.extend(meta, { hotCopy: hotCopyItems });
-                },
-                function(error) {
-                    console.log('ArchieML conversion error:');
-                    console.log(error);
-                }
-            );
+                        metaObj = _.extend(meta, { hotCopy: hotCopyItems });
+                    },
+                    function(error) {
+                        console.log('ArchieML conversion error:');
+                        console.log(error);
+                    }
+                );
+            }
         }
-    }
 
-    return metaObj;
+        return metaObj;
+    }
 };
