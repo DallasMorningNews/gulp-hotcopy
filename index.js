@@ -22,6 +22,8 @@ function parseArchieFile(fileName) {
 
 module.exports = {
     watchHotCopyFiles: function(gulp, tasks) {
+        var reload = require('browser-sync').create().reload;
+
         return gulp.watch(
             './build/static/assets/hot-copy/*.aml',
             tasks
