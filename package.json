@@ -1,10 +1,9 @@
 {
   "name": "gulp-hotcopy",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "A tool to include converted ArchieML-to-JSON copy in a page's nunjucks context.",
   "main": "index.js",
   "scripts": {
-    "install-templates": "node ./install_scripts/install-templates.js",
     "do-something": "node ./install_scripts/tth.js"
   },
   "repository": {
