@@ -4,7 +4,7 @@
   "description": "A tool to include converted ArchieML-to-JSON copy in a page's nunjucks context.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install-templates": "node ./install_scripts/install-templates.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,9 @@
     "gulp": "^3.9.1",
     "gulp-nunjucks-render": "^2.0.0",
     "nunjucks-markdown-filter": "^0.1.0",
-    "underscore": "^1.8.3"
+    "shelljs": "^0.7.5",
+    "underscore": "^1.8.3",
+    "yargs": "^6.5.0",
+    "yargs-parser": "^4.2.0"
   }
 }
