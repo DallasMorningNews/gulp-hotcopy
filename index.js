@@ -2,6 +2,7 @@ var _ = require('underscore');
 var Promise = require('bluebird');
 var archieml = Promise.promisifyAll(require('archieml'));
 var fs = Promise.promisifyAll(require('fs'));
+var markdownFilter = require('nunjucks-markdown-filter');
 
 
 var HOT_COPY_DIR = './build/static/assets/hot-copy/';
@@ -28,6 +29,26 @@ module.exports = {
             './build/static/assets/hot-copy/*.aml',
             tasks
         ).on("change", reload);
+    },
+    extendNunjucks: function(nunjucksEnv) {
+        markdownFilter.install(nunjucksEnv, 'markdown');
+        nunjucksEnv.addGlobal(
+            'hotCopyHelper',
+            function () {
+                return {
+                    'connect': function(copySlug) {
+                        if (
+                            typeof this.ctx.hotCopyItems !== 'undefined' &&
+                            _.contains(_.keys(this.ctx.hotCopyItems), copySlug)
+                        ) {
+                            return this.ctx.hotCopyItems[copySlug];
+                        }
+
+                        return false;
+                    }.bind(this)
+                };
+            }
+        );
     },
     insertHotCopy: function(meta) {
         var metaObj = meta;
@@ -64,7 +85,7 @@ module.exports = {
                             );
                         });
 
-                        metaObj = _.extend(meta, { hotCopy: hotCopyItems });
+                        metaObj = _.extend(meta, { hotCopyItems: hotCopyItems });
                     },
                     function(error) {
                         console.log('ArchieML conversion error:');
