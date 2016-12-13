@@ -1,0 +1,10 @@
+{%- if bodyGraph.type|truncate(4, true, '')|lower == 'text' -%}
+    {% include "hot-copy/text-graph.html" %}
+{% elif bodyGraph.type|lower == 'ad' %}
+    {% include "adblock" + bodyGraph.value.placementNumber + ".html" %}
+{% elif bodyGraph.type|lower == 'embed' %}
+    {% set embedContents = bodyGraph.value %}
+    {% include "embeds/" + bodyGraph.value.slug + ".html" %}
+{% else %}
+    {% include "hot-copy/" + bodyGraph.type + ".html" %}
+{% endif %}
