@@ -8,9 +8,9 @@ var markdownFilter = require('nunjucks-markdown-filter');
 var HOT_COPY_DIR = './build/static/assets/hot-copy/';
 
 
-function parseArchieFile(fileName) {
+function parseArchieFile(hotCopyDir, fileName) {
     return new Promise(function (resolve, reject) {
-        var fileRead =  fs.readFileAsync(HOT_COPY_DIR + fileName + '.aml', 'utf-8');
+        var fileRead =  fs.readFileAsync(hotCopyDir + fileName + '.aml', 'utf-8');
 
         fileRead.then(
           function(data) {
@@ -21,12 +21,19 @@ function parseArchieFile(fileName) {
     });
 }
 
-module.exports = {
+module.exports = function() {
+    configure: function(config) {
+        this.hotCopyDir = HOT_COPY_DIR;
+        if (_.has(config, 'hotCopyDir')) {
+            this.hotCopyDir = config.hotCopyDir;
+        }
+        console.log(this.hotCopyDir);
+    },
     watchHotCopyFiles: function(gulp, tasks) {
         var reload = require('browser-sync').create().reload;
 
         return gulp.watch(
-            './build/static/assets/hot-copy/*.aml',
+            this.hotCopyDir + '*.aml',
             tasks
         ).on("change", reload);
     },
@@ -52,16 +59,18 @@ module.exports = {
     },
     insertHotCopy: function(meta) {
         var metaObj = meta;
+        var thisObj = this;
 
         if (typeof meta.hotCopyDocument !== 'undefined') {
             if (meta.hotCopyDocument !== '') {
                 var hotCopyItems = {};
 
                 var archiePromises = _.map(
-                    fs.readdirSync(HOT_COPY_DIR),
+                    fs.readdirSync(thisObj.hotCopyDir),
                     function(dirFile) {
                         if (dirFile.substring(dirFile.indexOf('.')) === '.aml') {
                             return parseArchieFile(
+                                thisObj.hotCopyDir,
                                 dirFile.substring(0, dirFile.indexOf('.'))
                             );
                         }
@@ -79,7 +88,7 @@ module.exports = {
 
                             // Write the data to a JSON file.
                             fs.writeFile(
-                                HOT_COPY_DIR + result.fileName + '.json',
+                                thisObj.hotCopyDir + result.fileName + '.json',
                                 JSON.stringify(result.data, null, 4),
                                 function(err) { if (err) { return console.log(err); } }
                             );
