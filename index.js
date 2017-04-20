@@ -21,7 +21,7 @@ function parseArchieFile(hotCopyDir, fileName) {
     });
 }
 
-module.exports = function() {
+module.exports = {
     configure: function(config) {
         this.hotCopyDir = HOT_COPY_DIR;
         if (_.has(config, 'hotCopyDir')) {
