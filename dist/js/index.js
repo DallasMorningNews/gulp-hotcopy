@@ -82,9 +82,13 @@ module.exports = {
                 Promise.all(_.compact(archiePromises)).then(
                     function(results) {
                         _.each(results, function(result) {
+                            // Convert markup to em-dashes, ellipses and curly quotes.
+                            // const educatedCopy = _.mapValues(result.data, (value, key) => {});
+                            const educatedCopy = result.data;
+
                             // Namespace hot-copy data under the 'hotCopy' property
                             // on the meta object.
-                            hotCopyItems[result.fileName] = result.data;
+                            hotCopyItems[result.fileName] = educatedCopy;
 
                             // Write the data to a JSON file.
                             fs.writeFile(

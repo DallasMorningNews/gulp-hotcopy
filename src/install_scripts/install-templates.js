@@ -1,9 +1,8 @@
-#! /usr/bin/env node
+// #! /usr/bin/env node
 var _ = require('underscore');
 var path = require('path');
 var shell = require('shelljs/global');
 var yargsParser = require('yargs-parser');
-
 
 var cleanedArgs = _.chain(process.argv)
                         .map(function(i) { return i; })
@@ -13,18 +12,22 @@ var cleanedArgs = _.chain(process.argv)
 
 var argv = yargsParser(cleanedArgs);
 
+var root_dir = argv['_'][0]
+
 var templateCount = 0;
 var folderCount = 0;
 
-_.each(ls('-d', 'templates/*'), function(directory) {
+_.each(ls('-d', 'src/templates/*'), function(directory) {
+    // console.log(directory);
     folderCount += 1;
 
-    if (!test('-d', path.join(argv.dir, path.basename(directory)))) {
+    if (!test('-d', path.join(root_dir, path.basename(directory)))) {
         // Directory does not exist. Create it:
-        mkdir('-p', path.join(argv.dir, path.basename(directory)));
+        mkdir('-p', path.join(root_dir, path.basename(directory)));
     }
 
     _.each(ls(directory), function(file) {
+        console.log(file);
         var currentFilePath = path.join(
             path.dirname(directory),
             path.basename(directory),
@@ -32,7 +35,7 @@ _.each(ls('-d', 'templates/*'), function(directory) {
         );
 
         var newFilePath = path.join(
-            argv.dir,
+            root_dir,
             path.basename(directory),
             path.basename(file)
         );
@@ -40,11 +43,10 @@ _.each(ls('-d', 'templates/*'), function(directory) {
         templateCount += 1;
 
         cp('-f', currentFilePath, newFilePath);
-
     });
 });
 
 echo(
     templateCount + ' templates in ' + folderCount + ' folders ' +
-    'have been copied to ' + argv.dir + '.'
+    'have been copied to ' + root_dir + '.'
 );
