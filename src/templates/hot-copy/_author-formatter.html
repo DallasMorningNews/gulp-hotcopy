@@ -1,0 +1,12 @@
+<p>By {%- if copy -%}
+                {% for author in copy.authors %}
+                    <a target="_blank" href="mailto:{{ author.email }}">{{ author.name }}</a>
+                    {% if loop.length == 1 %}&nbsp;&nbsp;|&nbsp;Staff Writer{%- else -%}
+                        {%- if loop.revindex0 == 0 -%} | Staff Writers{% elif loop.revindex0 == 1 %} and {% else %}, {% endif %}
+                    {% endif %}
+                {% else %}
+                    <a target="_blank" href="mailto:emailaddresshere">Writer Name</a> | Staff Writer
+                {% endfor %}
+            {% else %}
+              <a target="_blank" href="mailto:emailaddresshere">Writer Name</a> | Staff Writer
+          {% endif %}</p>

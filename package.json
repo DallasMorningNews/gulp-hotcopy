@@ -1,10 +1,10 @@
 {
   "name": "gulp-hotcopy",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "A tool to include converted ArchieML-to-JSON copy in a page's nunjucks context.",
-  "main": "dist/js/index.js",
+  "main": "src/js/index.js",
   "scripts": {
-    "install-templates": "node ./src/install_scripts/install-templates.js"
+    "postinstall": "node src/install_scripts/install.js"
   },
   "repository": {
     "type": "git",
@@ -17,31 +17,9 @@
     "bluebird": "^3.4.6",
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
-    "gulp-nunjucks-render": "^2.0.0",
+    "gulp-nunjucks-html": "^2.0.0",
+    "lodash": "^4.17.4",
     "nunjucks-markdown-filter": "^0.1.0",
-    "shelljs": "^0.7.5",
-    "smartypants": "0.0.5",
-    "underscore": "^1.8.3",
-    "yargs": "^6.5.0",
-    "yargs-parser": "^4.2.0"
-  },
-  "devDependencies": {
-    "babel-eslint": "^7.1.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babelify": "^7.3.0",
-    "browserify": "^14.0.0",
-    "eslint": "^3.17.1",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.0",
-    "event-stream": "^3.3.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^2.0.0",
-    "gulp-util": "^3.0.8",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "shelljs": "^0.7.5"
   }
 }
