@@ -26,6 +26,8 @@ Dynamic copy for your Gulp-generated HTML.
 
 This library is very specific to projects built with the latest versions of the [generator-dmninteractives](https://github.com/DallasMorningNews/generator-dmninteractives) tool. As such, the instructions may not be particularly clear to external users.
 
+If you're already using our generator tool, you can add hot copy in four easy steps:
+
 1. Run the following line (or add `gulp-hotcopy` to your project's dependencies/devDependencies):
 
 ```bash
