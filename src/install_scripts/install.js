@@ -21,22 +21,25 @@ const parentPath = _.chain(modulePathParts)
 
 const placeGulpTask = (srcPath, destPath) => {
   const srcTasksDir = path.join(srcPath, 'src', 'gulp_scripts');
-  const destTasksDir = path.join(destPath, 'gulp', 'tasks');
+  const destTasksDir = path.join(destPath, 'gulp', 'tasks', 'hot-copy');
 
-  const srcTaskPath = path.join(srcTasksDir, 'templates.js');
-  const destTaskPath = path.join(destTasksDir, 'templates.js');
-  const destDupeTaskPath = path.join(destTasksDir, 'templates.archived.js');
-
-  if (shell.test('-f', destTaskPath)) {
-    if (shell.test('-f', destDupeTaskPath)) {
-      shell.cp('-f', srcTaskPath, destTaskPath);
-    } else {
-      shell.mv('-f', destTaskPath, destDupeTaskPath);
-      shell.cp('-f', srcTaskPath, destTaskPath);
-    }
-  } else {
-    shell.cp('-f', srcTaskPath, destTaskPath);
+  if (!shell.test('-d', destTasksDir)) {
+    shell.mkdir('-p', destTasksDir);
   }
+
+  _.forEach(shell.ls(srcTasksDir), (file) => {
+    const srcTaskPath = path.join(
+      srcTasksDir,
+      path.basename(file)  // eslint-disable-line comma-dangle
+    );
+
+    const destTaskPath = path.join(
+      destTasksDir,
+      path.basename(file)  // eslint-disable-line comma-dangle
+    );
+
+    shell.cp('-f', srcTaskPath, destTaskPath);
+  });
 };
 
 const placeTemplates = (srcPath, destPath) => {
