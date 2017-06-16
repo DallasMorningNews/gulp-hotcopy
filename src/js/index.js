@@ -65,8 +65,8 @@ module.exports = {
     var metaObj = meta;
     var thisObj = this;
 
-    if (typeof meta.hotCopyDocument !== 'undefined') {
-      if (meta.hotCopyDocument !== '') {
+    if (typeof meta.hotCopy !== 'undefined') {
+      if (meta.hotCopy !== '') {
         var hotCopyItems = {};
 
         var archiePromises = _.map(
