@@ -13,7 +13,7 @@ hotCopy.configure({
   hotCopyDir: './src/assets/hot-copy/'
 });
 
-let meta = require('./../../meta.json');
+let meta = require('./../../../meta.json');
 
 
 module.exports = () => {
