@@ -79,9 +79,9 @@ const loadDocument = function(credentials, docID) {
 };
 
 
-const parseDocument = function(docID) {
+const parseDocument = function(credentialHash, docID) {
   return new Promise(function(resolve, reject) {
-    var authorization = authorize();
+    var authorization = authorize(credentialHash);
 
     authorization.then(
       function(credentials) {
