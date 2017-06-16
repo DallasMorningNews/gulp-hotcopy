@@ -5,6 +5,9 @@ var fs = Promise.promisifyAll(require('fs'));
 var markdownFilter = require('nunjucks-markdown-filter');
 
 
+var fetchDocument = require('./fetch_document');
+
+
 var HOT_COPY_DIR = './src/assets/hot-copy/';
 
 
@@ -22,6 +25,7 @@ function parseArchieFile(hotCopyDir, fileName) {
 }
 
 module.exports = {
+  fetch: fetchDocument,
   configure: function(config) {
     this.hotCopyDir = HOT_COPY_DIR;
     if (_.has(config, 'hotCopyDir')) {
